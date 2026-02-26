@@ -246,7 +246,7 @@ elif page == "Company Hub":
     st.subheader("Company Hub")
     st.write("Seed Ask: ₹1 Cr for Tamil Nadu Pilot")
     st.write("Equity Offered: 15%")
-    st.write("Founder: Sasidaran — Chennai")
+    st.write("Founder: Nishaanth — Chennai")
 
 # --------------------------------------------------
 # FOOTER
@@ -255,3 +255,4 @@ st.markdown(
     "<div class='footer'>Veyara Nexus • Biological Stability Infrastructure</div>",
     unsafe_allow_html=True
 )
+
