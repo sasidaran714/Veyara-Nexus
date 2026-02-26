@@ -6,13 +6,8 @@ import numpy as np
 import plotly.graph_objects as go
 import folium
 from streamlit_folium import st_folium
-import qrcode
-import io
-import base64
 import random
 import uuid
-from PIL import Image, ImageDraw, ImageFont
-import time
 
 # --------------------------------------------------
 # PAGE CONFIG
@@ -26,51 +21,66 @@ st.set_page_config(
 # --------------------------------------------------
 # GLOBAL DARK THEME FIX (STRONG WHITE TEXT)
 # --------------------------------------------------
-st.markdown("""
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
+st.markdown(
+    """
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
 
-html, body, [class*="css"], .stApp {
-    font-family: 'Plus Jakarta Sans', sans-serif !important;
-    background: #0A1428 !important;
-    color: #E6F2FF !important;
-}
+    html, body, [class*="css"] {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        background: #0A1428;
+        color: #E6F2FF !important;
+    }
 
-h1,h2,h3,h4,h5,h6,p,span,div,label,strong,small,li {
-    color: #E6F2FF !important;
-}
+    .stApp {
+        background: linear-gradient(180deg,#0A1428 0%, #071025 100%);
+    }
 
-.stMarkdown, .element-container {
-    color: #E6F2FF !important;
-}
+    /* Sidebar */
+    section[data-testid="stSidebar"] {
+        background-color: #071025 !important;
+    }
 
-.stButton>button {
-    background-color: #0EA5E9 !important;
-    color: #FFFFFF !important;
-    border-radius: 8px !important;
-    font-weight: 700 !important;
-}
+    section[data-testid="stSidebar"] * {
+        color: #E6F2FF !important;
+    }
 
-.panel {
-    background: rgba(10,20,40,0.5) !important;
-    border-radius: 12px !important;
-    padding: 16px !important;
-    border: 1px solid rgba(255,255,255,0.05) !important;
-}
+    div[role="radiogroup"] label {
+        color: #E6F2FF !important;
+    }
 
-.metric-box {
-    text-align:center;
-    font-size:28px;
-    font-weight:800;
-}
+    /* Panels */
+    .panel {
+        background: rgba(10,20,40,0.6);
+        border: 1px solid rgba(255,255,255,0.05);
+        border-radius: 14px;
+        padding: 22px;
+        text-align: center;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.5);
+    }
 
-.footer {
-    color: rgba(230,242,255,0.5) !important;
-    text-align:center;
-    margin-top:20px;
-}
-</style>
-""", unsafe_allow_html=True)
+    .metric-box {
+        font-size: 36px;
+        font-weight: 800;
+        color: #FFFFFF;
+        margin-bottom: 8px;
+    }
+
+    .footer {
+        color: rgba(230,242,255,0.6);
+        font-size: 12px;
+        text-align: center;
+        margin-top: 30px;
+    }
+
+    h2, h3 {
+        color: #FFFFFF !important;
+    }
+
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
 IST = pytz.timezone("Asia/Kolkata")
 
@@ -84,6 +94,7 @@ def format_ist(dt):
 # SIDEBAR
 # --------------------------------------------------
 st.sidebar.markdown("## 🧬 Veyara BioResilience Pvt Ltd")
+
 page = st.sidebar.radio("Navigate", [
     "Command Center",
     "BioPulse",
@@ -97,8 +108,10 @@ page = st.sidebar.radio("Navigate", [
 # HEADER
 # --------------------------------------------------
 st.markdown(
-    f"<h2>Veyara Nexus — Living Command Center</h2>"
-    f"<p>LIVE FROM TAMIL NADU PILOT — {format_ist(ist_now())}</p>",
+    f"""
+    <h2>Veyara Nexus — Living Command Center</h2>
+    <p style="opacity:0.7;">LIVE FROM TAMIL NADU PILOT — {format_ist(ist_now())}</p>
+    """,
     unsafe_allow_html=True
 )
 
@@ -114,16 +127,26 @@ if page == "Command Center":
     col1, col2, col3 = st.columns(3)
 
     with col1:
-        st.markdown("<div class='panel'><div class='metric-box'>78%</div>Biological Stability</div>", unsafe_allow_html=True)
+        st.markdown(
+            "<div class='panel'><div class='metric-box'>78%</div>Biological Stability</div>",
+            unsafe_allow_html=True
+        )
+
     with col2:
-        st.markdown("<div class='panel'><div class='metric-box'>3</div>Active Alerts</div>", unsafe_allow_html=True)
+        st.markdown(
+            "<div class='panel'><div class='metric-box'>3</div>Active Alerts</div>",
+            unsafe_allow_html=True
+        )
+
     with col3:
-        st.markdown("<div class='panel'><div class='metric-box'>2,840</div>BioCredits Minted</div>", unsafe_allow_html=True)
+        st.markdown(
+            "<div class='panel'><div class='metric-box'>2,840</div>BioCredits Minted</div>",
+            unsafe_allow_html=True
+        )
 
     st.markdown("### Tamil Nadu Map")
 
     m = folium.Map(location=[11.0, 78.0], zoom_start=7, tiles="CartoDB dark_matter")
-
     folium.CircleMarker([12.83,79.7], radius=10, color="red", fill=True).add_to(m)
     folium.CircleMarker([13.08,80.27], radius=8, color="orange", fill=True).add_to(m)
 
@@ -140,13 +163,19 @@ elif page == "BioPulse":
     risk = np.random.randint(45, 90, size=10)
 
     fig = go.Figure()
-    fig.add_trace(go.Scatter(x=hours, y=risk, mode="lines+markers", line=dict(color="#0EA5E9")))
+    fig.add_trace(go.Scatter(
+        x=hours,
+        y=risk,
+        mode="lines+markers",
+        line=dict(color="#0EA5E9")
+    ))
 
     fig.update_layout(
         font=dict(color="#E6F2FF"),
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)"
     )
+
     fig.update_xaxes(color="#E6F2FF")
     fig.update_yaxes(color="#E6F2FF")
 
@@ -192,17 +221,18 @@ elif page == "Impact Observatory":
     st.subheader("Impact Observatory")
 
     hectares = st.slider("Hectares Treated", 1, 500, 50)
-
     revenue = hectares * 870000
 
     fig = go.Figure()
-    fig.add_trace(go.Bar(x=["2026","2027","2028"], y=[revenue*0.3, revenue*0.7, revenue]))
+    fig.add_trace(go.Bar(x=["2026","2027","2028"],
+                         y=[revenue*0.3, revenue*0.7, revenue]))
 
     fig.update_layout(
         font=dict(color="#E6F2FF"),
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)"
     )
+
     fig.update_xaxes(color="#E6F2FF")
     fig.update_yaxes(color="#E6F2FF")
 
@@ -214,7 +244,6 @@ elif page == "Impact Observatory":
 elif page == "Company Hub":
 
     st.subheader("Company Hub")
-
     st.write("Seed Ask: ₹1 Cr for Tamil Nadu Pilot")
     st.write("Equity Offered: 15%")
     st.write("Founder: Sasidaran — Chennai")
@@ -222,4 +251,7 @@ elif page == "Company Hub":
 # --------------------------------------------------
 # FOOTER
 # --------------------------------------------------
-st.markdown("<div class='footer'>Veyara Nexus • Biological Stability Infrastructure</div>", unsafe_allow_html=True)
+st.markdown(
+    "<div class='footer'>Veyara Nexus • Biological Stability Infrastructure</div>",
+    unsafe_allow_html=True
+)
